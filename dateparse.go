@@ -32,8 +32,10 @@ func (a *App) HandlePath(pathString string) (string, string, string, error) {
 				path[index] = a.Projects[a.currentProjectIndex].Name
 
 			case 1: // Category level
-				if a.currentCategoryIndex == -1 {
+				if a.currentCategoryIndex == -1 && (path[2] != "*" && path[2] != ".") {
 					return "", "", "", errors.New("cannot reference null category")
+				} else if path[2] == "*" || path[2] == "." {
+					continue
 				}
 				// Check if project actually has categories
 				proj := a.Projects[a.currentProjectIndex]
@@ -50,14 +52,17 @@ func (a *App) HandlePath(pathString string) (string, string, string, error) {
 				var tasks []*Task
 				if a.currentCategoryIndex != -1 {
 					tasks = a.Projects[a.currentProjectIndex].Categories[a.currentCategoryIndex].Tasks
+					path[index] = tasks[a.currentTaskIndex].Name
 				} else {
 					tasks = a.Projects[a.currentProjectIndex].Tasks
+					path[index] = tasks[a.currentTaskIndex].Name
+					path[1] = tasks[a.currentTaskIndex].CategoryName
 				}
 
 				if len(tasks) == 0 || a.currentTaskIndex >= len(tasks) {
 					return "", "", "", errors.New("task selection out of sync")
 				}
-				path[index] = tasks[a.currentTaskIndex].Name
+
 			}
 		}
 	}
@@ -83,24 +88,24 @@ func (a *App) HandlePath(pathString string) (string, string, string, error) {
 func parseIncrement(input string) (uint, uint, uint, uint, error) {
 	bits := strings.Split(input, "_")
 	if len(bits) != 2 {
-		return 0,0,0,0, fmt.Errorf("invalid shorthand format")
+		return 0, 0, 0, 0, fmt.Errorf("invalid shorthand format")
 	}
 
 	amount, err := strconv.Atoi(bits[0])
 	if err != nil {
-		return 0,0,0,0, fmt.Errorf("invalid shortcut number: %s", bits[0])
+		return 0, 0, 0, 0, fmt.Errorf("invalid shortcut number: %s", bits[0])
 	}
 	switch bits[1] {
 	case "d":
-		return 0, 0, 0, uint(amount) , nil
+		return 0, 0, 0, uint(amount), nil
 	case "w":
-		return 0,0,uint(amount),0 , nil
+		return 0, 0, uint(amount), 0, nil
 	case "m":
-		return 0,uint(amount),0,0, nil
+		return 0, uint(amount), 0, 0, nil
 	case "y":
-		return uint(amount),0,0,0, nil
+		return uint(amount), 0, 0, 0, nil
 	default:
-		return 0,0,0,0, fmt.Errorf("unknown unit: %s", bits[1])
+		return 0, 0, 0, 0, fmt.Errorf("unknown unit: %s", bits[1])
 	}
 }
 

@@ -103,6 +103,7 @@ func (p *Project) syncTasks() {
 
 	// Add all tasks
 	for _, category := range p.Categories {
+		category.SortTasksByUrgency()
 		for _, task := range category.Tasks {
 			p.Tasks = append(p.Tasks, task)
 		}
@@ -266,19 +267,31 @@ type Task struct {
 func ScoreTask(task *Task) (float64, error) {
 	now := time.Now()
 	dueHours := task.Deadline.Sub(now).Hours()
-	if dueHours > 0 {
-		timeScore := 2 / (float64(dueHours + 1))
-		priorityScore := float64(task.Priority) * 0.1
-		score := timeScore + priorityScore
-		return score, nil
-	} else {
-		timeScore := float64(2)
-		priorityScore := float64(task.Priority) * 0.1
-		overdueScore := math.Min(2.0, math.Abs(dueHours)*0.1)
-		score := timeScore + priorityScore + overdueScore
-		return score, nil
-	}
+    priorityValue := float64(task.Priority)
 
+    // 1. The Gradient (0.0 to 1.0)
+    // 144 hours = 6 days. 
+    // This number stays at 1.0 when far away and shrinks to 0.0 at the deadline.
+    gradient := math.Max(0, math.Min(1.0, dueHours / 144.0))
+
+    if dueHours > 0 {
+        // PRIORITY PHASE (Farther than 6 days)
+        // When gradient is 1.0, each priority level is worth 48 points (2 days).
+        // As gradient drops to 0, priority value drops to 0.
+        pBonus := priorityValue * 48.0 * gradient
+        
+        // TIME PHASE
+        // We subtract dueHours from a large constant so smaller hours = higher score.
+        // Near zero, this is the only thing that moves the needle.
+        timeScore := 5000.0 - dueHours
+
+        return timeScore + pBonus, nil
+    } else {
+        // OVERDUE PHASE
+        // Once overdue, priority is just a tie-breaker (0.1).
+        // Time is the absolute king.
+        return 10000.0 + math.Abs(dueHours) + (priorityValue * 0.1), nil
+    }
 }
 
 func (t *Task) incrementTask() error {
