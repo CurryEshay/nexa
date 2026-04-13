@@ -306,6 +306,7 @@ func (a *App) NewTask(projectName string, categoryName string, taskName string, 
 	// Update relevant category's slice and map
 	(*category).Tasks = append((*category).Tasks, task)
 	(*category).TaskMap[taskName] = task
+	(*category).SortTasksByUrgency()
 
 	// Find relevant project and sync
 	project := a.ProjectMap[projectName]
@@ -334,6 +335,9 @@ func (a *App) newTask(projectName string, categoryName string, taskName string, 
 	// Update relevant category's slice and map
 	(*category).Tasks = append((*category).Tasks, task)
 	(*category).TaskMap[taskName] = task
+	(*category).SortTasksByUrgency()
+
+	category.SortTasksByUrgency()
 
 	// Find relevant project and sync
 	project := a.ProjectMap[projectName]
@@ -377,6 +381,8 @@ func (a *App) removeTask(projectName string, categoryName string, taskName strin
 	// slice if there is more than 1 task
 
 	a.Projects[projectIndex].syncTasks()
+	category := a.Projects[projectIndex].Categories[categoryIndex]
+	category.SortTasksByUrgency()
 
 	if a.currentCategoryIndex != -1 {
 		if a.currentTaskIndex > len(a.Projects[projectIndex].Categories[categoryIndex].Tasks)-1 {
@@ -415,25 +421,32 @@ func (a *App) restoreTask() error {
 		return err
 	}
 
+	category := a.ProjectMap[task.ProjectName].CategoryMap[task.CategoryName]
+	category.SortTasksByUrgency()
+
 	return nil
 }
 
 func (a *App) doneTask(projectName string, categoryName string, taskName string) error {
-	_, _, task, err := a.findByPath(projectName, categoryName, taskName)
+	_, category, task, err := a.findByPath(projectName, categoryName, taskName)
 	if err != nil {
 		return err
 	}
 
 	if task.Repeating == false {
+
 		err := a.removeTask(projectName, categoryName, taskName)
 		if err != nil {
 			return err
 		} else {
+			category.SortTasksByUrgency()
 			return nil // Clear it on success
 		}
+
 		// If on a project
 	} else {
 		task.incrementTask()
+		category.SortTasksByUrgency()
 		return nil
 	}
 
@@ -484,6 +497,7 @@ func (a *App) newRepeatingTask(projectName string, categoryName string, taskName
 	// Update relevant category's slice and map
 	(*category).Tasks = append((*category).Tasks, task)
 	(*category).TaskMap[taskName] = task
+	(*category).SortTasksByUrgency()
 
 	// Find relevant project and sync
 	project := a.ProjectMap[projectName]
