@@ -9,6 +9,8 @@ Nexa aims to solve the bloat of modern to-do software by providing a fast, tree-
 > **Note to Developers:** This was my first Go program. The codebase is a "learning artifact" it’s functional, but likely messy and difficult to modify. Explore at your own risk!
 
 ---
+<img width="1351" height="337" alt="nexa_demo_1" src="https://github.com/user-attachments/assets/7b7ffd32-ae5d-4058-852a-93c3f5f02b7d" />
+
 
 ## ✨ Features
 * **Hierarchical Logic:** Organise your life into Projects → Categories → Tasks.
