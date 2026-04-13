@@ -96,4 +96,88 @@ To protect your data, `rm` commands are disabled by default.
 2.  Perform your `rm` command.
 3.  Type `lk` to re-lock.
 
----
+
+
+-----
+
+## 🚀 Quick Start Guide
+
+Nexa is a standalone binary. No installation or dependencies are required. Just download the version for your system and run it.
+
+### 1\. Download the Binary
+
+Download the appropriate file for your machine from the [Releases](https://github.com/CurryEshay/nexa/releases) page:
+
+| OS | Architecture | Binary Name |
+| :--- | :--- | :--- |
+| **Linux** | AMD64 (Standard) | `nexa-linux-amd64` |
+| **Windows** | AMD64 (Standard) | `nexa-windows-amd64.exe` |
+| **macOS** | Apple Silicon (M1/M2/M3) | `nexa-darwin-arm64` |
+| **macOS** | Intel | `nexa-darwin-amd64` |
+
+-----
+
+### 2\. Installation Instructions
+
+#### 🐧 Linux
+
+1.  Open your terminal.
+2.  Give the file execution permissions:
+    ```bash
+    chmod +x nexa-linux-amd64
+    ```
+3.  Run it:
+    ```bash
+    ./nexa-linux-amd64
+    ```
+    *(Optional)* Move it to your path to run it from anywhere: `sudo mv nexa-linux-amd64 /usr/local/bin/nexa`
+
+#### 🪟 Windows
+
+1.  Open **PowerShell** or **Command Prompt**.
+2.  Navigate to your Downloads folder:
+    ```powershell
+    cd ~/Downloads
+    ```
+3.  Run the executable:
+    ```powershell
+    ./nexa-windows-amd64.exe
+    ```
+
+#### 🍎 macOS
+
+1.  Open Terminal.
+2.  Grant execution permissions:
+    ```bash
+    chmod +x nexa-darwin-arm64
+    ```
+3.  **Note:** On first run, macOS may block the app because it is from an "Unidentified Developer."
+      * Go to **System Settings \> Privacy & Security**.
+      * Scroll down and click **"Open Anyway"** for Nexa.
+4.  Run it:
+    ```bash
+    ./nexa-darwin-arm64
+    ```
+
+-----
+
+### 3\. Basic Commands
+
+Once the TUI (Terminal User Interface) is open, use these keyboard-driven commands:
+
+  * **`mk;[Project]/[Category]/[Task];priority;date;time`**: Create a new task.
+  * **`dn;[Project]/[Category]/[Task]`**: Mark a task as done.
+  * **`Shift + up/down`**: Navigate the tree view.
+  * * **`Shift + up/down`**: Navigate the tree view.
+  * * * **`Shift + left/right`**: Navigate the task view.
+  * **`q` or `Ctrl+C`**: Quit Nexa.
+
+-----
+
+### 🛠 Troubleshooting
+
+  * **Data Location:** Nexa saves your tasks in `~/.nexa/nexa_data.json` on Linux/Mac, and `C:\Users\YourName\.nexa\nexa_data.json` on Windows.
+  * **Nil Pointer Error:** If the app crashes on first run, ensure your user has permission to create folders in the Home directory.
+
+-----
+
