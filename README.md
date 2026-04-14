@@ -2,12 +2,12 @@ This project is licensed under the CC BY-NC-SA 4.0 License
 ---
 
 # Nexa 
-**A minimalist, keyboard-centric TUI task manager for power users.**
-
-Nexa aims to solve the bloat of modern to-do software by providing a fast, tree-based architecture that lives entirely in your terminal. It focuses on automatic ranking, intuitive path-based command entry, and cross-platform persistence.
+**An efficient terminal tool that tells you what to do next.**
 
 Nexa removes the friction of deciding where to start.  
 Instead of scanning a to-do list, tasks are automatically ranked so you can immediately begin working.
+
+Nexa aims to solve the bloat of modern to-do software by providing a fast, tree-based architecture that lives entirely in your terminal. It focuses on automatic ranking, intuitive path-based command entry, and cross-platform persistence.
 
 Built for power users who prefer speed, keyboard control, and zero bloat.
 
