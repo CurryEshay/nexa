@@ -98,16 +98,20 @@ A command has a key word followed by arguments. A key word calls a function, mea
 
 ## Make
 Makes an object.
+
 `
 mk;[path/to/object];[extra args when making a task]
 `
 ### Make project
+
 `
 mk;[path/to/project]
 `
+
 E.g. mk;myProject
 
 ### Make categories
+
 `
 mk;[path/to/category]
 `
@@ -117,6 +121,7 @@ E.g. mk;Education/Math
 Note: For this to work the “Education” project must already exist.
 
 ### Make task
+
 `
 mk;[path/to/task];[priority];[date];[time - optional, default 11:59PM]
 `
@@ -141,12 +146,15 @@ rm;[path/to/object]
 `
 
 ### Remove project
+
 `
 rm;[path/to/project]
 `
+
 E.g. rm;myProject
 
 ### Remove categories
+
 `
 rm;[path/to/category]
 `
@@ -155,6 +163,7 @@ E.g. rm;Education/Math
 Note: For this to work the “Education” project must already exist.
 
 ### Remove task
+
 `
 rm;[path/to/task]
 `
@@ -165,18 +174,25 @@ Note: For this to work, the Education project and Math category must exist.
 
 ## Move
 Moves an object to a different path, can be used for renaming. The program must be unlocked to use this function.
+
 `
 mv;[old_path/to/old_object];[new_path/to/new_object]
 `
+
 ### Move project (Essentially renaming)
+
 `
 mv;[old_path/to/project];[new_path/to/project]
 `
+
 E.g. mv;myProject;myProjectNew
+
 ### Move categories
+
 `
 mv;[old_path/to/category];[new_path/to/category]
 `
+
 Renaming
 E.g. mv;Education/Math;Education/English
 
@@ -186,6 +202,7 @@ E.g. mv;Education/Math;newEducation/English
 Note: For this to work the “Education” and “newEducation” project must already exist.
 
 ### Move task
+
 `
 mv;[old_path/to/task];[new_path/to/task]
 `
@@ -236,6 +253,7 @@ rp;Health/Running/Run 2km;1;0 0 1 0;13/04/2026;4:00pm
 
 ## Done task
 Used to complete a task. Does not require unlocking of the program. Do this to complete a task instead of remove (rm). Works for both one off and repeating tasks.
+
 `
 dn;[path/to/task] 
 `
