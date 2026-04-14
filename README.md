@@ -1,4 +1,7 @@
-This project is licensed under the CC BY-NC-SA 4.0 License
+## License
+This software is licensed under the PolyForm Noncommercial License 1.0.0. 
+You may use, modify, and share it for non-commercial purposes only. 
+Commercial use is strictly prohibited.
 ---
 
 # Nexa 
