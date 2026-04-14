@@ -1,0 +1,36 @@
+PolyForm Noncommercial License 1.0.0
+
+Acceptance
+Each party that exercises any of the rights granted in this license 
+accepts its terms and conditions.
+
+Licensed Rights
+Each party that grants you rights under this license ("Licensor") 
+grants you a worldwide, royalty-free, non-exclusive, perpetual, 
+non-sublicensable license to do the following for noncommercial 
+purposes only:
+  - Reproduce the software.
+  - Prepare derivative works based on the software.
+  - Distribute the software and derivative works.
+  - Publicly display and perform the software.
+
+Noncommercial Purposes
+Noncommercial purposes are purposes that are not primarily intended for 
+or directed toward commercial advantage or monetary compensation.
+
+Redistribution
+You must include a copy of this license and all copyright notices with 
+any copy of the software or derivative works that you distribute.
+
+No Other Rights
+No other rights are granted, including any patent rights or rights to 
+use any trademark, service mark, or logo.
+
+Disclaimer of Warranties
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
