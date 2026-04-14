@@ -234,7 +234,7 @@ The first 2 arguments are the same as making a one time task, although there are
 
 Note: These are delimited by a space. Here are some examples.
 
-Every week: 0 0 1 0		Every month: 0 1 0 0		Every month and 1 day: 0 0 1 1
+Every week: 0 0 1 0		Every month: 0 1 0 0		Every month and 1 day: 0 1 0 1
 
 Every 8 days: 0 0 1 1		Every year: 1 0 0 0		Every 2 years and 5 months: 2 5 0 0
 
