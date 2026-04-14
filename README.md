@@ -72,7 +72,6 @@ You can refer to items using `/` or `-`.
 | **`rs`** | `rs;path;date` | **Reschedule** an existing task. |
 | **`ulk`** | `ulk` | **Unlock** the app to allow deletions. |
 | **`lk`** | `lk` | **Lock** the app for safety. |
-| **`lk`** | `lk` | **Lock** the app for safety. |
 | **`q`** | `q` or `quit` | **Exit** Nexa. |
 | **`p`** | `p;path;newPriority` | Change **priority** of a task. |
 
