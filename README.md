@@ -6,11 +6,25 @@ This project is licensed under the CC BY-NC-SA 4.0 License
 
 Nexa aims to solve the bloat of modern to-do software by providing a fast, tree-based architecture that lives entirely in your terminal. It focuses on automatic ranking, intuitive path-based command entry, and cross-platform persistence.
 
+Nexa removes the friction of deciding where to start.  
+Instead of scanning a to-do list, tasks are automatically ranked so you can immediately begin working.
+
+Built for power users who prefer speed, keyboard control, and zero bloat.
+
 > **Note to Developers:** This was my first Go program. The codebase is a "learning artifact" it’s functional, but likely messy and difficult to modify. Explore at your own risk!
 
 ---
 <img width="1351" height="337" alt="nexa_demo_1" src="https://github.com/user-attachments/assets/7b7ffd32-ae5d-4058-852a-93c3f5f02b7d" />
+---
+## 🧠 How it works
 
+1. Add tasks
+2. Select a project or category
+3. Nexa ranks tasks automatically
+4. Start with the top task
+
+No planning. No reordering. Just execution.
+---
 
 ## ✨ Features
 * **Hierarchical Logic:** Organise your life into Projects → Categories → Tasks.
