@@ -11,11 +11,15 @@ Instead of scanning a to-do list, tasks are automatically ranked so you can imme
 
 Built for power users who prefer speed, keyboard control, and zero bloat.
 
-> **Note to Developers:** This was my first Go program. The codebase is a "learning artifact" it’s functional, but likely messy and difficult to modify. Explore at your own risk!
+> **Note to Developers:** This was built as a learning project in Go.  
+The code is functional but not optimised for extensibility. Explore at your own risk!
 
 ---
+
 <img width="1351" height="337" alt="nexa_demo_1" src="https://github.com/user-attachments/assets/7b7ffd32-ae5d-4058-852a-93c3f5f02b7d" />
+
 ---
+
 ## 🧠 How it works
 
 1. Add tasks
@@ -24,13 +28,14 @@ Built for power users who prefer speed, keyboard control, and zero bloat.
 4. Start with the top task
 
 No planning. No reordering. Just execution.
+
 ---
 
 ## ✨ Features
+* **Automatic Ranking:** Tasks are automatically sorted by priority and urgency.
 * **Hierarchical Logic:** Organise your life into Projects → Categories → Tasks.
 * **Path-Based Commands:** Manipulate data using intuitive paths like `Work/ProjectA/Finish_Docs`.
 * **Dynamic Deadlines:** Set dates using shorthand like `1_d` (tomorrow) or `2_w` (two weeks).
-* **Automatic Ranking:** Tasks are automatically sorted by priority and urgency.
 * **Safety First:** Integrated "Lock/Unlock" system to prevent accidental deletion of large projects.
 * **Portable Data:** Your data is stored in a simple JSON file at `~/.nexa/nexa_data.json`, making it easy to sync across devices.
 
