@@ -58,7 +58,9 @@ Education
 ### Task view example
 
 Task Name	            Priority        Due Date			        Days Remaining
+
 Finish exercise 6A	P1	        Friday, Apr 15 11:59PM          2 days
+
 Finish exercise 6B	P2	        Friday, Apr 17 11:59PM          4 days
 
 Note: Repeating tasks will show how often they repeat
@@ -252,7 +254,7 @@ rp;Health/Running/Run 2km;1;0 0 1 0;13/04/2026;4:00pm
 
 
 ## Done task
-Used to complete a task. Does not require unlocking of the program. Do this to complete a task instead of remove (rm). Works for both one off and repeating tasks.
+Used to complete a task. Does not require unlocking of the program. Do this to complete a task instead of remove (rm). Works for both one off and repeating tasks. For convenience, you may use ctrl+d while a task is selected to complete it. This does not require unlocking. When a repeating task is "done", it does not disappear, its due date is increased by the increment. If you accidently delete a task and want to bring it back, use ctrl+z to restore tasks.
 
 `
 dn;[path/to/task] 
