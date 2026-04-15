@@ -9,7 +9,6 @@ import (
 )
 
 func (a *App) HandlePath(pathString string) (string, string, string, error) {
-	pathString = strings.ReplaceAll(pathString, ",", "/")
 	path := strings.Split(pathString, "/")
 
 	if len(path) == 0 {
@@ -32,11 +31,18 @@ func (a *App) HandlePath(pathString string) (string, string, string, error) {
 				path[index] = a.Projects[a.currentProjectIndex].Name
 
 			case 1: // Category level
-				if a.currentCategoryIndex == -1 && (path[2] != "*" && path[2] != ".") {
-					return "", "", "", errors.New("cannot reference null category")
-				} else if path[2] == "*" || path[2] == "." {
-					continue
+				if len(path) == 3 {
+					if a.currentCategoryIndex == -1 && (path[2] != "*" && path[2] != ".") {
+						return "", "", "", errors.New("cannot reference null category")
+					} else if (path[2] == "*" || path[2] == ".") && a.currentCategoryIndex == -1 {
+						continue
+					}
+				} else {
+					if a.currentCategoryIndex == -1 {
+						return "", "", "", errors.New("cannot reference null category")
+					}
 				}
+
 				// Check if project actually has categories
 				proj := a.Projects[a.currentProjectIndex]
 				if len(proj.Categories) == 0 || a.currentCategoryIndex >= len(proj.Categories) {

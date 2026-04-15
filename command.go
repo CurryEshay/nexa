@@ -27,6 +27,7 @@ func (a *App) InitCommands() {
 		"dn":   a.handleDone,
 		"rp":   a.handleMakeRepeatingTask,
 		"p":    a.handleReprioritise,
+		"rt":   a.handleRestoreTask,
 	}
 }
 
@@ -53,14 +54,12 @@ func (a *App) handleCommands(input string) error {
 
 func (a *App) UnlockApp(args []string) error {
 	a.Locked = false
-	fmt.Println("App is now unlocked")
-	return nil
+	return errors.New("Warning (Ignore error): App is now unlocked")
 }
 
 func (a *App) LockApp(args []string) error {
 	a.Locked = true
-	fmt.Println("App is now locked")
-	return nil
+	return errors.New("Warning (Ignore error): App is now locked")
 }
 func (a *App) SplitArgString(argString string) ([]string, error) {
 
@@ -496,6 +495,9 @@ func (a *App) HandleMove(args []string) error {
 			// Update project name of task
 			task.ProjectName = newProjectName
 
+			// Update category name of task
+			task.CategoryName = newCategoryName
+
 			// Update new project and old project tasks
 			a.ProjectMap[oldProjectName].syncTasks()
 			a.ProjectMap[newProjectName].syncTasks()
@@ -695,6 +697,15 @@ func (a *App) handleReprioritise(args []string) error {
 
 	task.Priority = uint64(priority)
 	project.syncTasks()
+
+	return nil
+}
+
+func (a *App) handleRestoreTask(args []string) error {
+	err := a.restoreTask()
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
