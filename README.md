@@ -1,20 +1,44 @@
-This project is licensed under the CC BY-NC-SA 4.0 License
+## License
+This software is licensed under the PolyForm Noncommercial License 1.0.0. 
+You may use, modify, and share it for non-commercial purposes only. 
+Commercial use is strictly prohibited.
 ---
 
 # Nexa 
-**A minimalist, keyboard-centric TUI task manager for power users.**
+**An efficient terminal tool that tells you what to do next.**
+
+Nexa removes the friction of deciding where to start.  
+Instead of scanning a to-do list, tasks are automatically ranked so you can immediately begin working.
 
 Nexa aims to solve the bloat of modern to-do software by providing a fast, tree-based architecture that lives entirely in your terminal. It focuses on automatic ranking, intuitive path-based command entry, and cross-platform persistence.
 
-> **Note to Developers:** This was my first Go program. The codebase is a "learning artifact" it’s functional, but likely messy and difficult to modify. Explore at your own risk!
+Built for power users who prefer speed, keyboard control, and zero bloat.
+
+> **Note to Developers:** This was built as a learning project in Go.  
+The code is functional but not optimised for extensibility. Explore at your own risk!
+
+---
+
+<img width="1351" height="337" alt="nexa_demo_1" src="https://github.com/user-attachments/assets/7b7ffd32-ae5d-4058-852a-93c3f5f02b7d" />
+
+---
+
+## 🧠 How it works
+
+1. Add tasks
+2. Select a project or category
+3. Nexa ranks tasks automatically
+4. Start with the top task
+
+No planning. No reordering. Just execution.
 
 ---
 
 ## ✨ Features
+* **Automatic Ranking:** Tasks are automatically sorted by priority and urgency.
 * **Hierarchical Logic:** Organise your life into Projects → Categories → Tasks.
 * **Path-Based Commands:** Manipulate data using intuitive paths like `Work/ProjectA/Finish_Docs`.
 * **Dynamic Deadlines:** Set dates using shorthand like `1_d` (tomorrow) or `2_w` (two weeks).
-* **Automatic Ranking:** Tasks are automatically sorted by priority and urgency.
 * **Safety First:** Integrated "Lock/Unlock" system to prevent accidental deletion of large projects.
 * **Portable Data:** Your data is stored in a simple JSON file at `~/.nexa/nexa_data.json`, making it easy to sync across devices.
 
@@ -34,6 +58,8 @@ Nexa follows a strict three-tier hierarchy:
 ---
 
 ## ⌨️ Usage & Commands
+This is just a starter guide. For a full guide with examples, refer to GUIDE.md.
+
 Nexa uses a **semicolon-delimited** syntax for commands: `command;arg1;arg2`.
 
 ### Path Syntax
@@ -55,7 +81,6 @@ You can refer to items using `/` or `-`.
 | **`rp`** | `rp;path;priority;Y M W D;date` | Create a **Repeating** task. |
 | **`rs`** | `rs;path;date` | **Reschedule** an existing task. |
 | **`ulk`** | `ulk` | **Unlock** the app to allow deletions. |
-| **`lk`** | `lk` | **Lock** the app for safety. |
 | **`lk`** | `lk` | **Lock** the app for safety. |
 | **`q`** | `q` or `quit` | **Exit** Nexa. |
 | **`p`** | `p;path;newPriority` | Change **priority** of a task. |
@@ -94,4 +119,87 @@ To protect your data, `rm` commands are disabled by default.
 2.  Perform your `rm` command.
 3.  Type `lk` to re-lock.
 
----
+
+
+-----
+
+## 🚀 Quick Start Guide
+
+Nexa is a standalone binary. No installation or dependencies are required. Just download the version for your system and run it.
+
+### 1\. Download the Binary
+
+Download the appropriate file for your machine from the [Releases](https://github.com/CurryEshay/nexa/releases) page:
+
+| OS | Architecture | Binary Name |
+| :--- | :--- | :--- |
+| **Linux** | AMD64 (Standard) | `nexa-linux-amd64` |
+| **Windows** | AMD64 (Standard) | `nexa-windows-amd64.exe` |
+| **macOS** | Apple Silicon (M1/M2/M3) | `nexa-darwin-arm64` |
+| **macOS** | Intel | `nexa-darwin-amd64` |
+
+-----
+
+### 2\. Installation Instructions
+
+#### 🐧 Linux
+
+1.  Open your terminal.
+2.  Give the file execution permissions:
+    ```bash
+    chmod +x nexa-linux-amd64
+    ```
+3.  Run it:
+    ```bash
+    ./nexa-linux-amd64
+    ```
+    *(Optional)* Move it to your path to run it from anywhere: `sudo mv nexa-linux-amd64 /usr/local/bin/nexa`
+
+#### 🪟 Windows
+
+1.  Open **PowerShell** or **Command Prompt**.
+2.  Navigate to your Downloads folder:
+    ```powershell
+    cd ~/Downloads
+    ```
+3.  Run the executable:
+    ```powershell
+    ./nexa-windows-amd64.exe
+    ```
+
+#### 🍎 macOS
+
+1.  Open Terminal.
+2.  Grant execution permissions:
+    ```bash
+    chmod +x nexa-darwin-arm64
+    ```
+3.  **Note:** On first run, macOS may block the app because it is from an "Unidentified Developer."
+      * Go to **System Settings \> Privacy & Security**.
+      * Scroll down and click **"Open Anyway"** for Nexa.
+4.  Run it:
+    ```bash
+    ./nexa-darwin-arm64
+    ```
+
+-----
+
+### 3\. Basic Commands
+
+Once the TUI (Terminal User Interface) is open, use these keyboard-driven commands:
+
+  * **`mk;[Project]/[Category]/[Task];priority;date;time`**: Create a new task.
+  * **`dn;[Project]/[Category]/[Task]`**: Mark a task as done.
+  * **`Shift + up/down`**: Navigate the tree view.
+  * * **`Shift + up/down`**: Navigate the tree view.
+  * * * **`Shift + left/right`**: Navigate the task view.
+  * **`q` or `Ctrl+C`**: Quit Nexa.
+
+-----
+
+### 🛠 Troubleshooting
+
+  * **Data Location:** Nexa saves your tasks in `~/.nexa/nexa_data.json` on Linux/Mac, and `C:\Users\YourName\.nexa\nexa_data.json` on Windows.
+  * **Nil Pointer Error:** If the app crashes on first run, ensure your user has permission to create folders in the Home directory.
+
+-----
