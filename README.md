@@ -63,7 +63,7 @@ This is just a starter guide. For a full guide with examples, refer to GUIDE.md.
 Nexa uses a **semicolon-delimited** syntax for commands: `command;arg1;arg2`.
 
 ### Path Syntax
-You can refer to items using `/` or `-`.
+You can refer to items using `/`.
 * **Full Path:** `Education/Math/Homework`
 * **Category Path:** `Education/Math`
 * **Project Path:** `Education`
