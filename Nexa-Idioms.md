@@ -16,7 +16,7 @@ Nexa is a garbage in garbage out system; to get good outputs, you must have good
 
 Tasks are viewed as executable units, meaning that they must be actionable, specific and able to be done in one sitting. If you hesitate or are unsure while reading a task it is invalid. If there is no clear finish condition, the task is invalid.
 
-In Nexa there are no big, overarching tasks, only smaller bounded and executable units that result in the bigger goal. 
+In Nexa there are no big, overarching tasks, only bounded and executable units.
 
 ### Examples:
 ---
@@ -81,8 +81,9 @@ In Nexa there are no big, overarching tasks, only smaller bounded and executable
 
 
 
-As a final rule of thumb, if a task cannot be done in one session / sitting (i.e. 2 hours, or 1.5 hours, varies person to person), it should be split into smaller tasks. 
-Ideally tasks should be 10-60 minutes long, although there are exceptions.
+As a final rule of thumb, if a task cannot be done in one session / sitting (i.e. 2 hours, or 1.5 hours), split it.
+
+Ideally tasks should be 10-60 minutes long with exceptions.
 
 ---
 
