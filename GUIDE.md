@@ -40,8 +40,6 @@ Education (Education)
 	Physics (Education/Physics)
 		task1 (Education/Physics/task1)
 
-Paths can also be separated using “-”. E.g. Education-Physics-task1
-
 ## Views
 Nexa displays 2 views. On the left you have a tree view of your projects and categories like before.
 
@@ -97,6 +95,9 @@ To avoid mistakes, to make any sort of deletion or moving, the program must be u
 
 ## Commands
 A command has a key word followed by arguments. A key word calls a function, meaning a keyword invokes a functionality, the arguments are the data required to execute a function. For example a remove function would need the path of the object you want to remove. The keywords and arguments are separated by semicolons.
+
+## Quiting program
+Type "q" or "quit" or press ctrl+c. This saves your current work.
 
 ## Make
 Makes an object.
