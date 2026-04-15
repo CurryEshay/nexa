@@ -14,11 +14,9 @@ Nexa is a garbage in garbage out system; to get good outputs, you must have good
 
 ## How to properly make tasks 
 
-Tasks are viewed as executable units, meaning that they must be actionable, specific and able to be done in one sitting. If you see a task and don't immediately know precisely what to do, it is too vague and must be broken down further. 
+Tasks are viewed as executable units, meaning that they must be actionable, specific and able to be done in one sitting. If you hesitate or are unsure while reading a task it is invalid. If there is no clear finish condition, the task is invalid.
 
-In Nexa there are no big, overarching tasks, only smaller executable units that result in the bigger goal. 
-
-Conclusion: Tasks MUST be granular for Nexa to work. 
+In Nexa there are no big, overarching tasks, only smaller bounded and executable units that result in the bigger goal. 
 
 ### Examples:
 ---
@@ -43,7 +41,7 @@ Conclusion: Tasks MUST be granular for Nexa to work.
  
   Do house chores: Vacuum house and clean dishes
 
-  **❌ Can clearly be split up into more tasks; avoid ‘and’**
+  **❌ Multiple endpoints in one task, can be split up; in general avoid ‘and’**
 
 
 
@@ -56,14 +54,39 @@ Conclusion: Tasks MUST be granular for Nexa to work.
   
   **✅ 2 separate, actionable tasks.**
 
+---
+
+**Bad:**
 
 
-As a final rule of thumb, if a task cannot be done in one sitting (i.e. 2 hours, or 1.5 hours, varies person to person), it should be split into smaller tasks. 
+  Create a program
+
+  **❌ Large, vague task. Cannot be done in one sitting. No clear end condition**
+
+
+
+**Optimal:**
+
+
+  Create adding task functionality
+  
+  Create removing task functionality
+
+  Make TUI display a tree view
+
+  Make TUI display a task view
+  
+  **✅ Task broken down into simpler doable tasks with clear end point.**
+  
+
+
+
+As a final rule of thumb, if a task cannot be done in one session / sitting (i.e. 2 hours, or 1.5 hours, varies person to person), it should be split into smaller tasks. 
 Ideally tasks should be 10-60 minutes long, although there are exceptions.
 
 ---
 
 ## Final Philosophy
 
-Nexa is not just a program, it is a shift in thinking. Instead of thinking about tasks categorically or as data, they are treated as actionable units that need to be completed as efficiently as possible. More organisation does not imply greater productivity, hence Nexa focuses on you getting your tasks done. To successfully use Nexa apply these principles and productivity shall be yours.
+Nexa is not just a program, it is a shift in thinking. Instead of thinking about tasks categorically or as data, they are treated as actionable units that need to be completed as efficiently as possible. Nexa does not organise work. It executes it. To use Nexa successfully, apply these principles and maintain INPUT DISCIPLINE.
 
