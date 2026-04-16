@@ -464,9 +464,6 @@ func (a *App) HandleMove(args []string) error {
 
 func (a *App) handleReschedule(args []string) error {
 
-	if len(args) != 2 && len(args) != 3 {
-		return errors.New("Invalid number of args")
-	}
 	projectName, categoryName, taskName, err := a.HandlePath(args[0])
 	if err != nil {
 		return err
@@ -485,6 +482,10 @@ func (a *App) handleReschedule(args []string) error {
 	}
 
 	if task.Repeating == false {
+		if len(args) != 2 && len(args) != 3 {
+			return errors.New("Invalid number of args")
+		}
+
 		if len(args) == 2 {
 			deadline, err := parseFlexibleDeadline(args[1])
 			if err != nil {
@@ -497,14 +498,6 @@ func (a *App) handleReschedule(args []string) error {
 			}
 
 			task.Deadline = deadline
-			// err = a.removeTask(projectName, categoryName, taskName)
-			// if err != nil {
-			// 	return err
-			// }
-			// err = a.newTask(projectName, categoryName, taskName, uint(task.Priority), deadline)
-			// if err != nil {
-			// 	return err
-			// }
 		}
 		if len(args) == 3 {
 			deadline, err := parseFlexibleDeadline(args[1] + " " + args[2])
@@ -517,14 +510,6 @@ func (a *App) handleReschedule(args []string) error {
 				return err
 			}
 			task.Deadline = deadline
-			// err = a.removeTask(projectName, categoryName, taskName)
-			// if err != nil {
-			// 	return err
-			// }
-			// err = a.newTask(projectName, categoryName, taskName, uint(task.Priority), deadline)
-			// if err != nil {
-			// 	return err
-			// }
 		}
 
 		return nil
