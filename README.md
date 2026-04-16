@@ -18,8 +18,14 @@ Built for power users who prefer speed, keyboard control, and zero bloat.
 The code is functional but not optimised for extensibility. Explore at your own risk!
 
 ---
+## Images
 
-<img width="1351" height="337" alt="nexa_demo_1" src="https://github.com/user-attachments/assets/7b7ffd32-ae5d-4058-852a-93c3f5f02b7d" />
+<img width="1354" height="349" alt="Screenshot 2026-04-16 11 59 25" src="https://github.com/user-attachments/assets/d946d23c-9cf1-423b-87e5-0724f37d5ae7" />
+
+---
+
+<img width="1354" height="349" alt="Screenshot 2026-04-16 11 59 05" src="https://github.com/user-attachments/assets/727120f3-dbda-4694-84f6-a6ddd466027e" />
+
 
 ---
 
