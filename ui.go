@@ -545,7 +545,7 @@ func (m model) View() string {
 						if math.Max(1, dueDays) == 1 {
 							dueHours := int(time.Until(task.Deadline).Hours())
 							deadlineString := time.Time.Format(task.Deadline, "Monday, Jan 02 3:04 PM")
-							taskView = taskView + renderBlock(selectedStyle, fmt.Sprintf("└─ %s    %s    P%d    %s    %v hours, Repeats Every: %s", task.Name, task.CategoryName, task.Priority, deadlineString, int(dueHours), incrementString), mainWidth)
+							taskView = taskView + renderBlock(selectedStyle, fmt.Sprintf("└─ %s    %s    P%d    %s    %v hours, Repeats Every: %s", task.Name, task.CategoryName, task.Priority, deadlineString, int(dueHours), incrementString), mainWidth) + "\n" + "\n"
 
 							// If task is due in more than a day
 						} else {
