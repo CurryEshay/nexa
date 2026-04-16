@@ -408,7 +408,7 @@ func (a *App) HandleMove(args []string) error {
 
 			// Update tasks with new category
 			for _, task := range category.Tasks {
-				task.ProjectName = newProjectName
+				task.CategoryName = newCategoryName
 			}
 			// Update new project and old project tasks
 			a.ProjectMap[oldProjectName].syncTasks(a)
