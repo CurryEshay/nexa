@@ -275,7 +275,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 			// Update all project and categories rankings
 			for _, project := range m.app.Projects {
-				project.syncTasks()
+				project.syncTasks(m.app)
 			}
 			return m, nil
 		}
@@ -403,7 +403,7 @@ func (m model) View() string {
 							// If task is due in more than a day
 						} else {
 							deadlineString := time.Time.Format(task.Deadline, "Monday, Jan 02 3:04 PM")
-							taskView = taskView + taskStyle.Render(fmt.Sprintf("└─ %s    P%d    %s    %v days, Repeats Every: %s", task.Name, task.Priority, deadlineString, int(dueDays), incrementString)) + "\n" + "\n"
+							taskView = taskView + renderBlock(taskStyle, fmt.Sprintf("└─ %s    P%d    %s    %v days, Repeats Every: %s", task.Name, task.Priority, deadlineString, int(dueDays), incrementString), mainWidth) + "\n" + "\n"
 						}
 
 					}
@@ -470,12 +470,12 @@ func (m model) View() string {
 						if math.Max(1, dueDays) == 1 {
 							dueHours := int(time.Until(task.Deadline).Hours())
 							deadlineString := time.Time.Format(task.Deadline, "Monday, Jan 02 3:04 PM")
-							taskView = taskView + renderBlock(taskStyle, fmt.Sprintf("└─ %s    P%d    %s    %v hours", task.Name, task.Priority, deadlineString, int(dueHours)), mainWidth) + "\n" + "\n"
+							taskView = taskView + renderBlock(taskStyle, fmt.Sprintf("└─ %s    %s    P%d    %s    %v hours", task.Name, task.CategoryName, task.Priority, deadlineString, int(dueHours)), mainWidth) + "\n" + "\n"
 
 							// If task is due in more than a day
 						} else {
 							deadlineString := time.Time.Format(task.Deadline, "Monday, Jan 02 3:04 PM")
-							taskView = taskView + renderBlock(taskStyle, fmt.Sprintf("└─ %s    P%d    %s    %v days", task.Name, task.Priority, deadlineString, int(dueDays)), mainWidth) + "\n" + "\n"
+							taskView = taskView + renderBlock(taskStyle, fmt.Sprintf("└─ %s    %s    P%d    %s    %v days", task.Name, task.CategoryName, task.Priority, deadlineString, int(dueDays)), mainWidth) + "\n" + "\n"
 						}
 
 					} else {
@@ -499,12 +499,12 @@ func (m model) View() string {
 						if math.Max(1, dueDays) == 1 {
 							dueHours := int(time.Until(task.Deadline).Hours())
 							deadlineString := time.Time.Format(task.Deadline, "Monday, Jan 02 3:04 PM")
-							taskView = taskView + renderBlock(taskStyle, fmt.Sprintf("└─ %s    P%d    %s    %v hours, Repeats Every: %s", task.Name, task.Priority, deadlineString, int(dueHours), incrementString), mainWidth) + "\n" + "\n"
+							taskView = taskView + renderBlock(taskStyle, fmt.Sprintf("└─ %s    %s    P%d    %s    %v hours, Repeats Every: %s", task.Name, task.CategoryName, task.Priority, deadlineString, int(dueHours), incrementString), mainWidth) + "\n" + "\n"
 
 							// If task is due in more than a day
 						} else {
 							deadlineString := time.Time.Format(task.Deadline, "Monday, Jan 02 3:04 PM")
-							taskView = taskView + renderBlock(taskStyle, fmt.Sprintf("└─ %s    P%d    %s    %v days, Repeats Every: %s", task.Name, task.Priority, deadlineString, int(dueDays), incrementString), mainWidth) + "\n" + "\n"
+							taskView = taskView + renderBlock(taskStyle, fmt.Sprintf("└─ %s    %s    P%d    %s    %v days, Repeats Every: %s", task.Name, task.CategoryName, task.Priority, deadlineString, int(dueDays), incrementString), mainWidth) + "\n" + "\n"
 						}
 
 					}
@@ -516,12 +516,12 @@ func (m model) View() string {
 						if math.Max(1, dueDays) == 1 {
 							dueHours := int(time.Until(task.Deadline).Hours())
 							deadlineString := time.Time.Format(task.Deadline, "Monday, Jan 02 3:04 PM")
-							taskView = taskView + renderBlock(taskStyle, fmt.Sprintf("└─ %s    P%d    %s    %v hours", task.Name, task.Priority, deadlineString, int(dueHours)), mainWidth) + "\n" + "\n"
+							taskView = taskView + renderBlock(selectedStyle, fmt.Sprintf("└─ %s    %s    P%d    %s    %v hours", task.Name, task.CategoryName, task.Priority, deadlineString, int(dueHours)), mainWidth) + "\n" + "\n"
 
 							// If task is due in more than a day
 						} else {
 							deadlineString := time.Time.Format(task.Deadline, "Monday, Jan 02 3:04 PM")
-							taskView = taskView + renderBlock(selectedStyle, fmt.Sprintf("└─ %s    P%d    %s    %v days", task.Name, task.Priority, deadlineString, int(dueDays)), mainWidth) + "\n" + "\n"
+							taskView = taskView + renderBlock(selectedStyle, fmt.Sprintf("└─ %s    %s    P%d    %s    %v days", task.Name, task.CategoryName, task.Priority, deadlineString, int(dueDays)), mainWidth) + "\n" + "\n"
 						}
 
 					} else {
@@ -545,12 +545,12 @@ func (m model) View() string {
 						if math.Max(1, dueDays) == 1 {
 							dueHours := int(time.Until(task.Deadline).Hours())
 							deadlineString := time.Time.Format(task.Deadline, "Monday, Jan 02 3:04 PM")
-							taskView = taskView + renderBlock(selectedStyle, fmt.Sprintf("└─ %s    P%d    %s    %v hours, Repeats Every: %s", task.Name, task.Priority, deadlineString, int(dueHours), incrementString), mainWidth)
+							taskView = taskView + renderBlock(selectedStyle, fmt.Sprintf("└─ %s    %s    P%d    %s    %v hours, Repeats Every: %s", task.Name, task.CategoryName, task.Priority, deadlineString, int(dueHours), incrementString), mainWidth)
 
 							// If task is due in more than a day
 						} else {
 							deadlineString := time.Time.Format(task.Deadline, "Monday, Jan 02 3:04 PM")
-							taskView = taskView + renderBlock(selectedStyle, fmt.Sprintf("└─ %s    P%d    %s    %v days, Repeats Every: %s", task.Name, task.Priority, deadlineString, int(dueDays), incrementString), mainWidth) + "\n" + "\n"
+							taskView = taskView + renderBlock(selectedStyle, fmt.Sprintf("└─ %s    %s    P%d    %s    %v days, Repeats Every: %s", task.Name, task.CategoryName, task.Priority, deadlineString, int(dueDays), incrementString), mainWidth) + "\n" + "\n"
 						}
 
 					}

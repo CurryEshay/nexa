@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"math"
 	"slices"
 	"strconv"
@@ -90,32 +89,36 @@ func (a *App) newProject(name string) error {
 	return nil
 }
 
-func (p *Project) printProjects() {
-	fmt.Println("--- Project: " + p.Name + " ----" + "\n")
-	for _, category := range p.Categories {
-		category.printCategories()
-	}
-}
 
-func (p *Project) syncTasks() {
+
+func (p *Project) syncTasks(a *App) {
 	// Reset task lists
 	p.Tasks = []*Task{}
 
 	// Add all tasks
 	for _, category := range p.Categories {
-		category.SortTasksByUrgency()
+		category.SortTasksByUrgency(a)
 		for _, task := range category.Tasks {
 			p.Tasks = append(p.Tasks, task)
 		}
 	}
 
-	p.SortTasksByUrgency()
+	p.SortTasksByUrgency(a)
 }
 
-func (p *Project) SortTasksByUrgency() {
+func (a *App) syncApp() {
+	if len(a.Projects) == 0 {
+return
+	}
+	for _, project := range a.Projects {
+		project.syncTasks(a)
+	}
+}
+ 
+func (p *Project) SortTasksByUrgency(app *App) {
 	slices.SortFunc(p.Tasks, func(a, b *Task) int {
-		scoreA, _ := ScoreTask(a)
-		scoreB, _ := ScoreTask(b)
+		scoreA, _ := app.ScoreTask(a)
+		scoreB, _ := app.ScoreTask(b)
 
 		// If a has a higher score, it should come BEFORE b.
 		// In Go SortFunc:
@@ -140,10 +143,10 @@ type Category struct {
 	TaskMap     map[string]*Task `json:"-"`
 }
 
-func (c *Category) SortTasksByUrgency() {
+func (c *Category) SortTasksByUrgency(app *App) {
 	slices.SortFunc(c.Tasks, func(a, b *Task) int {
-		scoreA, _ := ScoreTask(a)
-		scoreB, _ := ScoreTask(b)
+		scoreA, _ := app.ScoreTask(a)
+		scoreB, _ := app.ScoreTask(b)
 
 		// If a has a higher score, it should come BEFORE b.
 		// In Go SortFunc:
@@ -152,7 +155,7 @@ func (c *Category) SortTasksByUrgency() {
 		// Return 0  if equal
 
 		if scoreA > scoreB {
-			return -1 // a is "more urgent", move it to the start
+			return -1 // a is "less urgent", move it to the start
 		}
 		if scoreA < scoreB {
 			return 1 // b is "more urgent", move it to the start
@@ -161,26 +164,7 @@ func (c *Category) SortTasksByUrgency() {
 	})
 }
 
-func (c *Category) printCategories() {
-	c.SortTasksByUrgency()
-	fmt.Printf("--- Category: %s --- \n", c.Name)
-	fmt.Println("")
-	for _, task := range c.Tasks {
 
-		dueDays := time.Until(task.Deadline).Hours() / 24
-
-		if math.Max(1, dueDays) == 1 {
-			dueHours := int(time.Until(task.Deadline).Hours())
-			deadlineString := time.Time.Format(task.Deadline, "Monday, Jan 02 3:04 PM")
-			fmt.Printf("- %s    P%d    %s    %v hours \n", strings.ReplaceAll(task.Name, "_", " "), task.Priority, deadlineString, int(dueHours))
-		} else {
-			deadlineString := time.Time.Format(task.Deadline, "Monday, Jan 02 3:04 PM")
-			fmt.Printf("- %s    P%d    %s    %v days \n", task.Name, task.Priority, deadlineString, int(dueDays))
-		}
-		fmt.Println("")
-
-	}
-}
 
 func (a *App) NewCategory(projectName string, categoryName string) error {
 
@@ -236,7 +220,7 @@ func (a *App) removeCategory(projectName string, categoryName string) error {
 		a.Projects[projectIndex].Categories = []*Category{}
 	}
 
-	a.Projects[projectIndex].syncTasks()
+	a.Projects[projectIndex].syncTasks(a)
 
 	// If the deleted category was the one currently selected
 	if len(a.Projects[projectIndex].Categories) == 0 {
@@ -264,34 +248,52 @@ type Task struct {
 	IncrementYears  uint      `json:"increment_years"`
 }
 
-func ScoreTask(task *Task) (float64, error) {
+// func ScoreTask(task *Task) (float64, error) {
+// 	now := time.Now()
+// 	dueHours := task.Deadline.Sub(now).Hours()
+//     priorityValue := float64(task.Priority)
+
+//     // 1. The Gradient (0.0 to 1.0)
+//     // 144 hours = 6 days. 
+//     // This number stays at 1.0 when far away and shrinks to 0.0 at the deadline.
+//     gradient := math.Max(0, math.Min(1.0, dueHours / 144.0))
+
+//     if dueHours > 0 {
+//         // PRIORITY PHASE (Farther than 6 days)
+//         // When gradient is 1.0, each priority level is worth 48 points (2 days).
+//         // As gradient drops to 0, priority value drops to 0.
+//         pBonus := priorityValue * 48.0 * gradient
+        
+//         // TIME PHASE
+//         // We subtract dueHours from a large constant so smaller hours = higher score.
+//         // Near zero, this is the only thing that moves the needle.
+//         timeScore := 5000.0 - dueHours
+
+//         return timeScore + pBonus, nil
+//     } else {
+//         // OVERDUE PHASE
+//         // Once overdue, priority is just a tie-breaker (0.1).
+//         // Time is the absolute king.
+//         return 10000.0 + math.Abs(dueHours) + (priorityValue * 0.1), nil
+//     }
+// }
+
+func (a *App) ScoreTask(task *Task) (float64, error) {
 	now := time.Now()
 	dueHours := task.Deadline.Sub(now).Hours()
     priorityValue := float64(task.Priority)
-
-    // 1. The Gradient (0.0 to 1.0)
-    // 144 hours = 6 days. 
-    // This number stays at 1.0 when far away and shrinks to 0.0 at the deadline.
-    gradient := math.Max(0, math.Min(1.0, dueHours / 144.0))
-
-    if dueHours > 0 {
-        // PRIORITY PHASE (Farther than 6 days)
-        // When gradient is 1.0, each priority level is worth 48 points (2 days).
-        // As gradient drops to 0, priority value drops to 0.
-        pBonus := priorityValue * 48.0 * gradient
-        
-        // TIME PHASE
-        // We subtract dueHours from a large constant so smaller hours = higher score.
-        // Near zero, this is the only thing that moves the needle.
-        timeScore := 5000.0 - dueHours
-
-        return timeScore + pBonus, nil
-    } else {
-        // OVERDUE PHASE
-        // Once overdue, priority is just a tie-breaker (0.1).
-        // Time is the absolute king.
-        return 10000.0 + math.Abs(dueHours) + (priorityValue * 0.1), nil
-    }
+	if dueHours > 0 {
+		priorityScore := math.Pow(priorityValue, a.PriorityCompression)
+		timeScore := math.Pow(dueHours + a.SmoothingConstant, a.OverdueAggression)
+		score := (priorityScore)/(timeScore)
+		return score, nil
+	} else {
+		overdueTime := math.Abs(dueHours)
+		priorityScore := math.Pow(priorityValue, a.PriorityCompression)
+		timeScore:= 1 + a.OverdueConstant + math.Pow((overdueTime)/a.SmoothingConstant, a.OverdueAggression)
+		score := priorityScore / timeScore
+		return score, nil
+	}
 }
 
 func (t *Task) incrementTask() error {
@@ -319,12 +321,12 @@ func (a *App) NewTask(projectName string, categoryName string, taskName string, 
 	// Update relevant category's slice and map
 	(*category).Tasks = append((*category).Tasks, task)
 	(*category).TaskMap[taskName] = task
-	(*category).SortTasksByUrgency()
+	(*category).SortTasksByUrgency(a)
 
 	// Find relevant project and sync
 	project := a.ProjectMap[projectName]
 
-	project.syncTasks()
+	project.syncTasks(a)
 	return nil
 }
 
@@ -348,14 +350,14 @@ func (a *App) newTask(projectName string, categoryName string, taskName string, 
 	// Update relevant category's slice and map
 	(*category).Tasks = append((*category).Tasks, task)
 	(*category).TaskMap[taskName] = task
-	(*category).SortTasksByUrgency()
+	(*category).SortTasksByUrgency(a)
 
-	category.SortTasksByUrgency()
+	category.SortTasksByUrgency(a)
 
 	// Find relevant project and sync
 	project := a.ProjectMap[projectName]
 
-	project.syncTasks()
+	project.syncTasks(a)
 
 	projectIndex, categoryIndex, err := a.findCategoryIndex(projectName, categoryName)
 	if err != nil {
@@ -393,9 +395,9 @@ func (a *App) removeTask(projectName string, categoryName string, taskName strin
 	}
 	// slice if there is more than 1 task
 
-	a.Projects[projectIndex].syncTasks()
+	a.Projects[projectIndex].syncTasks(a)
 	category := a.Projects[projectIndex].Categories[categoryIndex]
-	category.SortTasksByUrgency()
+	category.SortTasksByUrgency(a)
 
 	if a.currentCategoryIndex != -1 {
 		if a.currentTaskIndex > len(a.Projects[projectIndex].Categories[categoryIndex].Tasks)-1 {
@@ -435,7 +437,7 @@ func (a *App) restoreTask() error {
 	}
 
 	category := a.ProjectMap[task.ProjectName].CategoryMap[task.CategoryName]
-	category.SortTasksByUrgency()
+	category.SortTasksByUrgency(a)
 
 	return nil
 }
@@ -452,14 +454,14 @@ func (a *App) doneTask(projectName string, categoryName string, taskName string)
 		if err != nil {
 			return err
 		} else {
-			category.SortTasksByUrgency()
+			category.SortTasksByUrgency(a)
 			return nil // Clear it on success
 		}
 
 		// If on a project
 	} else {
 		task.incrementTask()
-		category.SortTasksByUrgency()
+		category.SortTasksByUrgency(a)
 		return nil
 	}
 
@@ -510,12 +512,12 @@ func (a *App) newRepeatingTask(projectName string, categoryName string, taskName
 	// Update relevant category's slice and map
 	(*category).Tasks = append((*category).Tasks, task)
 	(*category).TaskMap[taskName] = task
-	(*category).SortTasksByUrgency()
+	(*category).SortTasksByUrgency(a)
 
 	// Find relevant project and sync
 	project := a.ProjectMap[projectName]
 
-	project.syncTasks()
+	project.syncTasks(a)
 
 	projectIndex, categoryIndex, err := a.findCategoryIndex(projectName, categoryName)
 	if err != nil {

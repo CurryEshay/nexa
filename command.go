@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"errors"
 	"fmt"
 	"os"
@@ -15,8 +14,7 @@ type CMDFunc func(args []string) error
 
 func (a *App) InitCommands() {
 	a.CMDMap = map[string]CMDFunc{
-		"mk": a.HandleMake,
-		// "c":     a.ClearTerminal, // removed for TUI
+		"mk":   a.HandleMake,
 		"rm":   a.HandleRemove,
 		"lk":   a.LockApp,
 		"ulk":  a.UnlockApp,
@@ -28,6 +26,11 @@ func (a *App) InitCommands() {
 		"rp":   a.handleMakeRepeatingTask,
 		"p":    a.handleReprioritise,
 		"rt":   a.handleRestoreTask,
+		"pw":   a.handleChangePriorityWeight,
+		"tw":   a.handleChangeTimeWeight,
+		"ow":   a.handleChangeOverdueWeight,
+		"oc":   a.handleChangeOverdueConstant,
+		"sc":   a.handleChangeSmoothingConstant,
 	}
 }
 
@@ -77,51 +80,6 @@ func (a *App) SplitArgString(argString string) ([]string, error) {
 	}
 
 	return args, nil
-}
-
-func (a *App) Parser() {
-	reader := bufio.NewReader(os.Stdin)
-
-	fmt.Print(">> ")
-	input, err := reader.ReadString('\n')
-	if err != nil {
-		a.ErrorLog(err)
-		return
-	}
-	input = strings.TrimSpace(input)
-	args, err := a.SplitArgString(input)
-	if err != nil {
-		a.ErrorLog(err)
-		return
-
-	}
-	args[0] = strings.ToLower(args[0])
-	handler, ok := a.CMDMap[args[0]]
-	if !ok {
-		a.CMDMap["h"]([]string{})
-		return
-	}
-	err = handler([]string(args[1:]))
-	if err != nil {
-		a.ErrorLog(err)
-		return
-	}
-
-}
-
-// Display help command
-func (a *App) ShowHelpMenu(args []string) error {
-	fmt.Println(`--- HELP MENU ---
-	mk\{proj}\{proj name}  - makes project
-	mk\{proj/category}\{category name} - makes category under project
-	mk\{proj/category/task}\{priority}\{date}\{time - default 11:59PM} - makes task under category
-	rm\{path/to/object} - removes an object (project, category or task, be careful)
-	dn\{path/to/task} - sets task to done
-	mv\{old/path/to/object}\{new/path/to/object} - move object to other spot or rename
-	rd\{path/to/task}\{name}\{priority}\{date}\{time - default 11:59PM} - re-define task, use * to keep the same
-	q - quit program`)
-	return nil
-
 }
 
 // Quit program
@@ -346,13 +304,6 @@ func (a *App) handleRemoveTask(projectName string, categoryName string, taskName
 	return err
 }
 
-func (a *App) HandleDisplay(Args []string) error {
-	for _, project := range a.Projects {
-		project.printProjects()
-	}
-	return nil
-}
-
 func (a *App) HandleMove(args []string) error {
 
 	if a.Locked == true {
@@ -454,8 +405,8 @@ func (a *App) HandleMove(args []string) error {
 			}
 
 			// Update new project and old project tasks
-			a.ProjectMap[oldProjectName].syncTasks()
-			a.ProjectMap[newProjectName].syncTasks()
+			a.ProjectMap[oldProjectName].syncTasks(a)
+			a.ProjectMap[newProjectName].syncTasks(a)
 
 			return nil
 		}
@@ -499,8 +450,8 @@ func (a *App) HandleMove(args []string) error {
 			task.CategoryName = newCategoryName
 
 			// Update new project and old project tasks
-			a.ProjectMap[oldProjectName].syncTasks()
-			a.ProjectMap[newProjectName].syncTasks()
+			a.ProjectMap[oldProjectName].syncTasks(a)
+			a.ProjectMap[newProjectName].syncTasks(a)
 
 			return nil
 		}
@@ -696,7 +647,7 @@ func (a *App) handleReprioritise(args []string) error {
 	}
 
 	task.Priority = uint64(priority)
-	project.syncTasks()
+	project.syncTasks(a)
 
 	return nil
 }
@@ -707,5 +658,100 @@ func (a *App) handleRestoreTask(args []string) error {
 		return err
 	}
 
+	return nil
+}
+
+func (a *App) handleChangePriorityWeight(args []string) error {
+	change, err := strconv.ParseFloat(args[0], 64)
+	if err != nil {
+		return err
+	}
+
+	if change <= 0 {
+		return errors.New("New value must be greater than 0")
+	}
+
+	if a.Locked == true {
+		return errors.New("Project must be unlocked to change weights")
+	}
+
+	a.PriorityCompression = change
+	a.syncApp()
+	return nil
+}
+
+func (a *App) handleChangeTimeWeight(args []string) error {
+	change, err := strconv.ParseFloat(args[0], 64)
+	if err != nil {
+		return err
+	}
+
+	if change <= 0 {
+		return errors.New("New value must be greater than 0")
+	}
+
+	if a.Locked == true {
+		return errors.New("Project must be unlocked to change weights")
+	}
+
+	a.TimeAggression = change
+	a.syncApp()
+	return nil
+}
+
+func (a *App) handleChangeSmoothingConstant(args []string) error {
+	change, err := strconv.ParseFloat(args[0], 64)
+	if err != nil {
+		return err
+	}
+
+	if change <= 0 {
+		return errors.New("New value must be greater than 0")
+	}
+
+	if a.Locked == true {
+		return errors.New("Project must be unlocked to change weights")
+	}
+
+	a.SmoothingConstant = change
+	a.syncApp()
+	return nil
+}
+
+func (a *App) handleChangeOverdueConstant(args []string) error {
+	change, err := strconv.ParseFloat(args[0], 64)
+	if err != nil {
+		return err
+	}
+
+	if change <= 0 {
+		return errors.New("New value must be greater than 0")
+	}
+
+	if a.Locked == true {
+		return errors.New("Project must be unlocked to change weights")
+	}
+
+	a.OverdueConstant = change
+	a.syncApp()
+	return nil
+}
+
+func (a *App) handleChangeOverdueWeight(args []string) error {
+	change, err := strconv.ParseFloat(args[0], 64)
+	if err != nil {
+		return err
+	}
+
+	if change <= 0 {
+		return errors.New("New value must be greater than 0")
+	}
+
+	if a.Locked == true {
+		return errors.New("Project must be unlocked to change weights")
+	}
+
+	a.OverdueAggression = change
+	a.syncApp()
 	return nil
 }

@@ -74,7 +74,7 @@ func (a *App) Load(args []string) error {
 				c.TaskMap[t.Name] = t
 			}
 		}
-		p.syncTasks()
+		p.syncTasks(a)
 	}
 	a.InitCommands()
 	return nil
