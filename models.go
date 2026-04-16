@@ -89,8 +89,6 @@ func (a *App) newProject(name string) error {
 	return nil
 }
 
-
-
 func (p *Project) syncTasks(a *App) {
 	// Reset task lists
 	p.Tasks = []*Task{}
@@ -108,13 +106,13 @@ func (p *Project) syncTasks(a *App) {
 
 func (a *App) syncApp() {
 	if len(a.Projects) == 0 {
-return
+		return
 	}
 	for _, project := range a.Projects {
 		project.syncTasks(a)
 	}
 }
- 
+
 func (p *Project) SortTasksByUrgency(app *App) {
 	slices.SortFunc(p.Tasks, func(a, b *Task) int {
 		scoreA, _ := app.ScoreTask(a)
@@ -163,8 +161,6 @@ func (c *Category) SortTasksByUrgency(app *App) {
 		return 0
 	})
 }
-
-
 
 func (a *App) NewCategory(projectName string, categoryName string) error {
 
@@ -254,7 +250,7 @@ type Task struct {
 //     priorityValue := float64(task.Priority)
 
 //     // 1. The Gradient (0.0 to 1.0)
-//     // 144 hours = 6 days. 
+//     // 144 hours = 6 days.
 //     // This number stays at 1.0 when far away and shrinks to 0.0 at the deadline.
 //     gradient := math.Max(0, math.Min(1.0, dueHours / 144.0))
 
@@ -263,7 +259,7 @@ type Task struct {
 //         // When gradient is 1.0, each priority level is worth 48 points (2 days).
 //         // As gradient drops to 0, priority value drops to 0.
 //         pBonus := priorityValue * 48.0 * gradient
-        
+
 //         // TIME PHASE
 //         // We subtract dueHours from a large constant so smaller hours = higher score.
 //         // Near zero, this is the only thing that moves the needle.
@@ -281,17 +277,17 @@ type Task struct {
 func (a *App) ScoreTask(task *Task) (float64, error) {
 	now := time.Now()
 	dueHours := task.Deadline.Sub(now).Hours()
-    priorityValue := float64(task.Priority)
+	priorityValue := float64(task.Priority)
 	if dueHours > 0 {
 		priorityScore := math.Pow(priorityValue, a.PriorityCompression)
-		timeScore := math.Pow(dueHours + a.SmoothingConstant, a.OverdueAggression)
-		score := (priorityScore)/(timeScore)
+		timeScore := math.Pow(dueHours+a.SmoothingConstant, a.OverdueAggression)
+		score := (priorityScore) / (timeScore)
 		return score, nil
 	} else {
 		overdueTime := math.Abs(dueHours)
 		priorityScore := math.Pow(priorityValue, a.PriorityCompression)
-		timeScore:= 1 + a.OverdueConstant + math.Pow((overdueTime)/a.SmoothingConstant, a.OverdueAggression)
-		score := priorityScore / timeScore
+		timeScore := 1 + a.OverdueConstant + math.Pow((overdueTime)/a.SmoothingConstant, a.OverdueAggression)
+		score := priorityScore * timeScore
 		return score, nil
 	}
 }
