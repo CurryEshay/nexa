@@ -290,3 +290,129 @@ p;[path/to/task];[priority]
 E.g.
 
 p;Education/CS/Assignment;3
+
+## Advanced Features
+
+### Ranking
+After v1.0.3, Nexa now allows you to change the weights in the ranking. For beginners THIS IS NOT RECOMMENDED, for power users, here is a guide on how to tune your Nexa ranking.
+
+If a task if not overdue, it is ranked as such
+
+$$ \text{score} = \frac{p^{\beta}}{(t + k)^{\alpha}} $$
+
+Where:
+- $p$ = priority  
+- $t$ = time remaining until deadline (in hours)  
+- $k$ = smoothing constant (prevents instability near deadline), default 24
+- $\alpha$ = time aggression, default 1.15
+- $\beta$ = priority compression, default 0.9
+
+
+If overdue.
+
+$$
+\text{score} = p^{\beta} \cdot \left(1 + \text{base} + \left(\frac{|t|}{k}\right)^{\gamma} \right)
+$$
+
+Where:
+- $|t|$ = overdue time
+- $\gamma$ = overdue growth rate, default 1.5
+- $\text{base}$ = immediate penalty for being overdue, default 0.75 
+
+
+### Parameter Effects
+
+#### $p$ (Priority)
+- Higher $p$ → task is more important  
+- Always increases score  
+- Effect is controlled by $\beta$
+
+---
+
+#### $t$ (Time Remaining)
+- Larger $t$ → task is further away → lower urgency  
+- Smaller $t$ → task is closer → higher urgency  
+- As $t \to 0$, urgency increases rapidly
+
+---
+
+#### $k$ (Smoothing Constant)
+- Prevents extreme spikes near deadline  
+- Higher $k$ → smoother, less aggressive urgency  
+- Lower $k$ → sharper urgency near deadline  
+
+Typical value: `24–36 hours`
+
+---
+
+#### $\alpha$ (Time Aggression)
+- Controls how strongly deadlines affect ranking  
+
+Effects:
+- Higher $\alpha$ → deadlines dominate more  
+- Lower $\alpha$ → priority matters more  
+
+Typical value: `~1.15`
+
+---
+
+#### $\beta$ (Priority Compression)
+- Controls how strongly priority affects ranking  
+
+Effects:
+- $\beta = 1$ → linear priority  
+- $\beta < 1$ → compresses priority differences  
+- $\beta > 1$ → exaggerates priority differences  
+
+Typical value: `~0.8–1.0`
+
+---
+
+#### $\gamma$ (Overdue Aggression)
+- Controls how aggressively overdue tasks rise  
+
+Effects:
+- Higher $\gamma$ → overdue tasks shoot to the top faster  
+- Lower $\gamma$ → slower escalation  
+
+Typical value: `~1.5`
+
+---
+
+#### $\text{base}$ (Overdue Constant)
+- Immediate boost when task becomes overdue  
+
+Effects:
+- Higher base → overdue tasks jump up instantly  
+- Lower base → more gradual increase  
+
+Typical value: `~0.5–1.0`
+
+### Syntax
+To change weights, program must be unlocked. All values must be greater than 0. These persist across sessions.
+
+`pw;{new value}`
+
+Change priotity compression
+
+
+`tw;{new value}`
+
+Change time aggression
+
+
+`ow;{new value}`
+
+Change overdue aggression
+
+
+`tc;[new value]`
+
+Change smoothing constant
+
+
+`oc;[new value]`
+
+Change overdue constant
+
+
