@@ -307,7 +307,7 @@ func (a *App) handleRemoveTask(projectName string, categoryName string, taskName
 func (a *App) HandleMove(args []string) error {
 
 	if a.Locked == true {
-		return errors.New("Error, project is locked, type ulk to unlock")
+		return errors.New("Error, program is locked, type ulk to unlock")
 	}
 
 	if len(args) != 2 {
@@ -360,6 +360,8 @@ func (a *App) HandleMove(args []string) error {
 			// Update categories
 			for _, category := range project.Categories {
 				category.ProjectName = newProjectName
+
+				// Update tasks
 				for _, task := range category.Tasks {
 					task.ProjectName = newProjectName
 				}
@@ -404,6 +406,10 @@ func (a *App) HandleMove(args []string) error {
 				task.ProjectName = newProjectName
 			}
 
+			// Update tasks with new category
+			for _, task := range category.Tasks {
+				task.ProjectName = newProjectName
+			}
 			// Update new project and old project tasks
 			a.ProjectMap[oldProjectName].syncTasks(a)
 			a.ProjectMap[newProjectName].syncTasks(a)
