@@ -4,8 +4,7 @@ You may use, modify, and share it for non-commercial purposes only.
 Commercial use is strictly prohibited.
 ---
 
-# Nexa 
-**An efficient terminal tool that tells you what to do next.**
+# **Nexa** - An keyboard centric terminal todo-list that tells you what to do next.
 
 Nexa removes the friction of deciding where to start.  
 Instead of scanning a to-do list, tasks are automatically ranked so you can immediately begin working.
