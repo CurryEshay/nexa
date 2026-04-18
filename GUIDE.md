@@ -300,7 +300,7 @@ p;Education/CS/Assignment;3
 ### Default time
 After v1.0.6 you may change the default time on commands, i.e. instead of by default being due at 11:59PM you can add a custom time for the default. The syntax is as follows.
 
-`dt;{default time as string}'
+`dt;{default time as string}`
 
 
 ### Ranking
