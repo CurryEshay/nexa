@@ -192,6 +192,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			} else {
 				m.error = "" // Clear it on success
 			}
+			return m, nil
 
 		// scroll through previous commands
 		case "up":
@@ -290,10 +291,6 @@ func (m model) View() string {
 		return "Loading..."
 	}
 
-	// Calculate sizes
-	sidebarWidth := int(float64(m.width) * 0.3)
-	mainWidth := m.width - sidebarWidth - 4 // -4 for borders/padding
-
 	// If there are no projects, or the index is invalid, reset or show empty state
 	if len(m.app.Projects) == 0 {
 		m.app.currentProjectIndex = 0
@@ -325,7 +322,30 @@ func (m model) View() string {
 
 		// ... rest of your for index, task := range ...
 	}
+	// Render navigation screen
+	panels := renderNavigationScreen(m)
 
+	// Errors
+
+	var errorBar string
+	if m.error != "" {
+		errorStyle := lipgloss.NewStyle().
+			Background(lipgloss.Color("9")).  // Red background
+			Foreground(lipgloss.Color("15")). // White text
+			Width(m.width).
+			Padding(0, 1)
+
+		errorBar = errorStyle.Render("ERROR: " + m.error)
+	}
+
+	return panels + "\n" + errorBar + "\n" + m.input.View()
+}
+
+func renderNavigationScreen(m model) string {
+
+	// Calculate sizes
+	sidebarWidth := int(float64(m.width) * 0.3)
+	mainWidth := m.width - sidebarWidth - 4 // -4 for borders/padding
 	// 1. Render Sidebar (The Tree)
 	sidebar := ""
 	if len(m.app.Projects) > 0 {
@@ -571,21 +591,10 @@ func (m model) View() string {
 		mainStyle.Render(taskView),
 	)
 
-	// Errors
+	return panels
 
-	var errorBar string
-	if m.error != "" {
-		errorStyle := lipgloss.NewStyle().
-			Background(lipgloss.Color("9")).  // Red background
-			Foreground(lipgloss.Color("15")). // White text
-			Width(m.width).
-			Padding(0, 1)
-
-		errorBar = errorStyle.Render("ERROR: " + m.error)
-	}
-
-	return panels + "\n" + errorBar + "\n" + m.input.View()
 }
+
 
 // Helper function to render a "tight" block
 func renderBlock(style lipgloss.Style, text string, maxWidth int) string {

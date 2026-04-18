@@ -21,6 +21,7 @@ type App struct {
 	TimeAggression       float64             `json:"time_aggression"`
 	OverdueConstant      float64             `json:"overdue_constant"`
 	OverdueAggression    float64             `json:"overdue_aggression"`
+	DefaultTime			string 				`json:"default_time"`
 }
 
 func NewApp() *App {
@@ -35,6 +36,7 @@ func NewApp() *App {
 		TimeAggression:      1.15,
 		OverdueConstant:     0.75,
 		OverdueAggression:   1.5,
+		DefaultTime: "11:59pm",
 	}
 	app.InitCommands()
 	return app

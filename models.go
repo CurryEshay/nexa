@@ -439,7 +439,7 @@ func (a *App) restoreTask() error {
 }
 
 func (a *App) doneTask(projectName string, categoryName string, taskName string) error {
-	_, category, task, err := a.findByPath(projectName, categoryName, taskName)
+	_, _, task, err := a.findByPath(projectName, categoryName, taskName)
 	if err != nil {
 		return err
 	}
@@ -450,14 +450,14 @@ func (a *App) doneTask(projectName string, categoryName string, taskName string)
 		if err != nil {
 			return err
 		} else {
-			category.SortTasksByUrgency(a)
+			a.syncApp()
 			return nil // Clear it on success
 		}
 
-		// If on a project
+		// If on a repeating task
 	} else {
 		task.incrementTask()
-		category.SortTasksByUrgency(a)
+		a.syncApp()
 		return nil
 	}
 

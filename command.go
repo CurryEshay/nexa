@@ -8,6 +8,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type CMDFunc func(args []string) error
@@ -31,6 +32,7 @@ func (a *App) InitCommands() {
 		"ow":   a.handleChangeOverdueWeight,
 		"oc":   a.handleChangeOverdueConstant,
 		"sc":   a.handleChangeSmoothingConstant,
+		"dt":   a.handleDefaultDate,
 	}
 }
 
@@ -177,7 +179,7 @@ func (a *App) handleMakeTask(projectName string, categoryName string, taskName s
 	}
 
 	if len(args) == 2 {
-		deadline, err := parseFlexibleDeadline(args[1])
+		deadline, err := a.parseFlexibleDeadline(args[1])
 		if err != nil {
 			return err
 		}
@@ -186,7 +188,7 @@ func (a *App) handleMakeTask(projectName string, categoryName string, taskName s
 	}
 	if len(args) == 3 {
 		deadlineString := fmt.Sprint(args[1] + " " + args[2])
-		deadline, err := parseFlexibleDeadline(deadlineString)
+		deadline, err := a.parseFlexibleDeadline(deadlineString)
 		if err != nil {
 			return err
 		}
@@ -493,7 +495,7 @@ func (a *App) handleReschedule(args []string) error {
 		}
 
 		if len(args) == 2 {
-			deadline, err := parseFlexibleDeadline(args[1])
+			deadline, err := a.parseFlexibleDeadline(args[1])
 			if err != nil {
 				return err
 			}
@@ -506,7 +508,7 @@ func (a *App) handleReschedule(args []string) error {
 			task.Deadline = deadline
 		}
 		if len(args) == 3 {
-			deadline, err := parseFlexibleDeadline(args[1] + " " + args[2])
+			deadline, err := a.parseFlexibleDeadline(args[1] + " " + args[2])
 			if err != nil {
 				return err
 			}
@@ -524,7 +526,7 @@ func (a *App) handleReschedule(args []string) error {
 			return errors.New("Invalid number of args")
 		}
 		if len(args) == 3 {
-			referenceTime, err := parseFlexibleDeadline(args[2])
+			referenceTime, err := a.parseFlexibleDeadline(args[2])
 			if err != nil {
 				return err
 			}
@@ -540,7 +542,7 @@ func (a *App) handleReschedule(args []string) error {
 
 			return nil
 		} else if len(args) == 4 {
-			referenceTime, err := parseFlexibleDeadline(args[2] + " " + args[3])
+			referenceTime, err := a.parseFlexibleDeadline(args[2] + " " + args[3])
 			if err != nil {
 				return err
 			}
@@ -597,7 +599,7 @@ func (a *App) handleMakeRepeatingTask(args []string) error {
 	}
 
 	if len(args) == 4 {
-		deadline, err := parseFlexibleDeadline(args[3])
+		deadline, err := a.parseFlexibleDeadline(args[3])
 		if err != nil {
 			return err
 		}
@@ -605,7 +607,7 @@ func (a *App) handleMakeRepeatingTask(args []string) error {
 		return err
 	}
 	if len(args) == 5 {
-		deadline, err := parseFlexibleDeadline(args[3] + " " + args[4])
+		deadline, err := a.parseFlexibleDeadline(args[3] + " " + args[4])
 		if err != nil {
 			return err
 		}
@@ -745,4 +747,23 @@ func (a *App) handleChangeOverdueWeight(args []string) error {
 	a.OverdueAggression = change
 	a.syncApp()
 	return nil
+}
+
+func (a *App) handleDefaultDate(args []string) error {
+	timeStr := args[0]
+	var err error
+	if strings.Contains(timeStr, "am") || strings.Contains(timeStr, "pm") {
+		_, err = time.Parse("3:04pm", timeStr)
+		if err != nil {
+			return fmt.Errorf("invalid time format: %s", timeStr)
+		}
+	} else {
+		_, err = time.Parse("15:04", timeStr)
+		if err != nil {
+			return fmt.Errorf("invalid time format: %s", timeStr)
+		}
+	}
+	a.DefaultTime = timeStr
+	return nil
+
 }

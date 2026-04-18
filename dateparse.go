@@ -116,7 +116,7 @@ func parseIncrement(input string) (uint, uint, uint, uint, error) {
 }
 
 // parseFlexibleDeadline is the entry point that coordinates the date and time parsing.
-func parseFlexibleDeadline(input string) (time.Time, error) {
+func (a *App) parseFlexibleDeadline(input string) (time.Time, error) {
 	input = strings.ToLower(strings.TrimSpace(input))
 	input = strings.ReplaceAll(input, "/", "-")
 
@@ -140,7 +140,7 @@ func parseFlexibleDeadline(input string) (time.Time, error) {
 	}
 
 	// 2. Resolve the Time (Provided or Default)
-	timePart := "11:59pm"
+	timePart := a.DefaultTime
 	if len(parts) > 1 {
 		timePart = parts[1]
 	}
@@ -208,3 +208,5 @@ func applyTimeToDate(baseDate time.Time, timeStr string) (time.Time, error) {
 	hour, min = t.Hour(), t.Minute()
 	return time.Date(baseDate.Year(), baseDate.Month(), baseDate.Day(), hour, min, 0, 0, time.Local), nil
 }
+
+
