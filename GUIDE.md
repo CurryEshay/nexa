@@ -93,6 +93,10 @@ You should not scan the full list. Start with the top 3.
 ## Locking
 To avoid mistakes, to make any sort of deletion or moving, the program must be unlocked. By default the program is locked, to unlock type “ulk”, to lock again type “lk”. You can still complete tasks while the project is locked.
 
+## Closing app
+Press ctrl+c or type q or quit into input box.
+
+
 ## Commands
 A command has a key word followed by arguments. A key word calls a function, meaning a keyword invokes a functionality, the arguments are the data required to execute a function. For example a remove function would need the path of the object you want to remove. The keywords and arguments are separated by semicolons.
 
@@ -292,6 +296,12 @@ E.g.
 p;Education/CS/Assignment;3
 
 ## Advanced Features
+
+### Default time
+After v1.0.6 you may change the default time on commands, i.e. instead of by default being due at 11:59PM you can add a custom time for the default. The syntax is as follows.
+
+`dt;{default time as string}'
+
 
 ### Ranking
 After v1.0.3, Nexa now allows you to change the weights in the ranking. For beginners THIS IS NOT RECOMMENDED, for power users, here is a guide on how to tune your Nexa ranking.
