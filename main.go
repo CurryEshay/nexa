@@ -8,10 +8,9 @@ import (
 )
 
 func main() {
-	app := NewApp()
-	err := app.Load(nil)
+	app, err := Load()
 	if err != nil {
-		app.ErrorLog(err)
+		fmt.Println(err)
 	}
 
 	if len(app.Projects) == 0 {
